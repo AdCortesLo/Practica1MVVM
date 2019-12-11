@@ -1,0 +1,160 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Practica1MVVM"
+        xmlns:ViewModel="clr-namespace:Practica1MVVM.ViewModel" x:Class="Practica1MVVM.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" MinHeight="598.489" MinWidth="801.924" Height="568.489" Width="777.924" Background="White">
+    <Window.DataContext>
+        <ViewModel:MainWindowViewModel/>
+    </Window.DataContext>
+    <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        
+
+        <Grid Grid.Column = "0" Background="{Binding IsContactesEnabled}" >
+            <RadioButton x:Name="rbContactes" Content="Contactes" HorizontalAlignment="Left" Margin="13,10,0,0" VerticalAlignment="Top" GroupName="RadioButtonGroup" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" IsChecked="{Binding IsRbContactesChecked}" />
+            <DataGrid Margin="10,88,19,137" AutoGenerateColumns="False" SelectedItem="{Binding ContacteSelected}" SelectedIndex="0" ItemsSource="{Binding Contactes}" SelectionMode="Single" IsReadOnly="True">
+                <DataGrid.CellStyle>
+                    <!--Override Highlighting so that its easy to see what is selected even when the control is not focused-->
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Style.Triggers>
+                            <Trigger  Property="IsSelected" Value="true">
+                                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            </Trigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True" />
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=IsKeyboardFocusWithin}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Nom" Binding="{Binding nom}" Width="*"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Cognoms" Binding="{Binding cognoms}" Width="*"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBox Margin="10,0,0,83" TextWrapping="Wrap" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="79" Text="{Binding ContacteSelected.nom, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Margin="94,0,17,83" TextWrapping="Wrap" Height="25" VerticalAlignment="Bottom" Text="{Binding ContacteSelected.cognoms, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Nom" Margin="8,0,221,106" Height="26" VerticalAlignment="Bottom"/>
+            <Label Content="Cognoms" Margin="94,0,87,106" RenderTransformOrigin="0.5,0.5" Height="26" VerticalAlignment="Bottom"/>
+            <Label Content="Filtre" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
+            <TextBox Height="23" Margin="51,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="118" Text="{Binding TextBoxContactes, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button x:Name="afegirContactes" Content="Afegir" Margin="10,0,0,51" HorizontalAlignment="Left" Width="68" Height="20" VerticalAlignment="Bottom" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}"/>
+            <Button x:Name="modificarContactes" Content="Modificar" Margin="94,0,102,51" Height="20" VerticalAlignment="Bottom" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}"/>
+            <Button x:Name="esborrarContactes" Content="Esborrar" Margin="0,0,18,51" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="68" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}"/>
+            <RadioButton x:Name="rbConteContacte" Content="Conté" HorizontalAlignment="Left" Margin="13,68,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="ContactesRB"/>
+            <RadioButton x:Name="rbComençaContacte" Content="Comença" HorizontalAlignment="Left" Margin="94,68,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="ContactesRB"/>
+            <RadioButton x:Name="rbAcabaContacte" Content="Acaba" HorizontalAlignment="Left" Margin="183,68,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="ContactesRB"/>
+            <RadioButton x:Name="rbSenseContacte" Content="Sense" HorizontalAlignment="Left" Margin="183,36,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="ContactesRB" IsChecked="True"/>
+        </Grid>
+        <Grid Grid.Column = "1" IsEnabled="{Binding IsTelefonsEnabled}" Background="{Binding IsTelefonsEnabled}">
+            <RadioButton x:Name="rbTelefons" Content="Telèfons" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" GroupName="RadioButtonGroup" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" Grid.Column="1" IsChecked="{Binding IsRbTelefonsChecked}"/>
+            <DataGrid Margin="10,88,19,137" AutoGenerateColumns="False" ItemsSource="{Binding Telefons}" SelectedItem="{Binding TelefonSelected}" SelectedIndex="0" IsReadOnly="True" SelectionMode="Single">
+                <DataGrid.CellStyle>
+                    <!--Override Highlighting so that its easy to see what is selected even when the control is not focused-->
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Style.Triggers>
+                            <Trigger  Property="IsSelected" Value="true">
+                                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            </Trigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True" />
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=IsKeyboardFocusWithin}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Telèfon" Binding="{Binding telefon1}" Width="*"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Tipus" Binding="{Binding tipus}" Width="*"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBox Margin="10,0,0,83" TextWrapping="Wrap" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="139" Text="{Binding Telefon1, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Margin="154,0,17,83" TextWrapping="Wrap" Height="25" VerticalAlignment="Bottom" Text="{Binding TipusT, UpdateSourceTrigger=PropertyChanged}" />
+            <Label Content="Telèfon" Margin="8,0,201,106" Height="26" VerticalAlignment="Bottom"/>
+            <Label Content="Tipus" Margin="149,0,31,106" RenderTransformOrigin="0.5,0.5" Height="26" VerticalAlignment="Bottom"/>
+            <Label Content="Filtre" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
+            <TextBox Height="23" Margin="51,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="117" Text="{Binding TextBoxTelefons, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button x:Name="afegirTelefons" Content="Afegir" Margin="10,0,0,51" HorizontalAlignment="Left" Width="68" Height="20" VerticalAlignment="Bottom" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" />
+            <Button x:Name="modificarTelefons" Content="Modificar" Margin="94,0,102,51" Height="20" VerticalAlignment="Bottom" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}"/>
+            <Button x:Name="esborrarTelefons" Content="Esborrar" Margin="0,0,18,51" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="68" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}"/>
+            <RadioButton x:Name="rbConteTelefon" Content="Conté" HorizontalAlignment="Left" Margin="13,68,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="TelefonsRB"/>
+            <RadioButton x:Name="rbComençaTelefon" Content="Comença" HorizontalAlignment="Left" Margin="94,68,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="TelefonsRB"/>
+            <RadioButton x:Name="rbAcabaTelefon" Content="Acaba" HorizontalAlignment="Left" Margin="183,68,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="TelefonsRB"/>
+            <RadioButton x:Name="rbSenseTelefon" Content="Sense" HorizontalAlignment="Left" Margin="183,36,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="TelefonsRB" IsChecked="True"/>
+        </Grid>
+        <Grid Grid.Column = "2" IsEnabled="{Binding IsEmailsEnabled}" Background="{Binding IsEmailsEnabled}">
+            <RadioButton x:Name="rbEmails" Content="Emails" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" GroupName="RadioButtonGroup" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" Grid.Column="2" IsChecked="{Binding IsRbEmailsChecked}"/>
+            <DataGrid Margin="10,88,19,137" AutoGenerateColumns="False" ItemsSource="{Binding Emails}" SelectedItem="{Binding EmailSelected}" SelectedIndex="0" IsReadOnly="True" SelectionMode="Single">
+                <DataGrid.CellStyle>
+                    <!--Override Highlighting so that its easy to see what is selected even when the control is not focused-->
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Style.Triggers>
+                            <Trigger  Property="IsSelected" Value="true">
+                                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            </Trigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True" />
+                                    <Condition Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=IsKeyboardFocusWithin}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Email" Binding="{Binding email1}" Width="*"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Tipus" Binding="{Binding tipus}" Width="*"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBox Margin="10,0,0,83" TextWrapping="Wrap" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="168" Text="{Binding Email1, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Margin="183,0,17,83" TextWrapping="Wrap" Height="25" VerticalAlignment="Bottom" Text="{Binding TipusE, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Email" Margin="8,0,201,106" Height="26" VerticalAlignment="Bottom"/>
+            <Label Content="Tipus" Margin="183,0,-2,106" RenderTransformOrigin="0.5,0.5" Height="26" VerticalAlignment="Bottom"/>
+            <Label Content="Filtre" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
+            <TextBox Height="23" Margin="51,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="118" Text="{Binding TextBoxEmails, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button x:Name="afegirEmails" Content="Afegir" Margin="10,0,0,51" HorizontalAlignment="Left" Width="68" Height="20" VerticalAlignment="Bottom" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}"/>
+            <Button x:Name="modificarEmails" Content="Modificar" Margin="94,0,102,51" Height="20" VerticalAlignment="Bottom" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}"/>
+            <Button x:Name="esborrarEmails" Content="Esborrar" Margin="0,0,18,51" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="68" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}"/>
+            <RadioButton x:Name="rbConteEmail" Content="Conté" HorizontalAlignment="Left" Margin="13,68,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="EmailsRB"/>
+            <RadioButton x:Name="rbComençaEmail" Content="Comença" HorizontalAlignment="Left" Margin="94,68,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="EmailsRB"/>
+            <RadioButton x:Name="rbAcabaEmail" Content="Acaba" HorizontalAlignment="Left" Margin="183,68,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="EmailsRB"/>
+            <RadioButton x:Name="rbSenseEmail" Content="Sense" HorizontalAlignment="Left" Margin="183,36,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="EmailsRB" IsChecked="True"/>
+        </Grid>
+    </Grid>
+</Window>
