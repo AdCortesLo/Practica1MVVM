@@ -1,17 +1,21 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using MvvmDialogs.ViewModels;
 using Practica1MVVM.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Practica1MVVM.ViewModel
 {
-    class MainWindowViewModel : INotifyPropertyChanged
+    class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged 
     {
         Contactes2Entities context = new Contactes2Entities();
         public event PropertyChangedEventHandler PropertyChanged;
@@ -47,7 +51,9 @@ namespace Practica1MVVM.ViewModel
                     break;
 
                 case "modificarContactes":
-                    contacte c = context.contactes.Where(x => x.contacteId == ContacteSelected.contacteId).FirstOrDefault();
+                    OnNewModalDialog();
+                    if (respuesta == 1) { 
+                        contacte c = context.contactes.Where(x => x.contacteId == ContacteSelected.contacteId).FirstOrDefault();
                     try
                     {
                         c = ContacteSelected;
@@ -58,17 +64,25 @@ namespace Practica1MVVM.ViewModel
                     context.SaveChanges();
                     //BtsClick("rbContactes");
                     PopulateEmailsTelefons();
+                    }
                     break;
 
                 case "esborrarContactes":
-                    try
+                    OnNewModalDialog();
+                    if (respuesta == 1)
                     {
-                        context.contactes.Remove(ContacteSelected);
+                        try
+                        {
+                            context.contactes.Remove(ContacteSelected);
+                        }
+                        catch (Exception ex) { }
+                        context.SaveChanges();
+                        PopulateEmailsTelefons();
+                        BtsClick("rbContactes"); 
                     }
-                    catch (Exception ex) { }
-                    context.SaveChanges();
-                    PopulateEmailsTelefons();
-                    BtsClick("rbContactes");
+                    break;
+
+                case "DuplicarContactes":
                     break;
 
                 case "afegirTelefons":
@@ -88,28 +102,36 @@ namespace Practica1MVVM.ViewModel
                     break;
 
                 case "modificarTelefons":
-                    telefon te = context.telefons.Where(x => x.contacteId == TelefonSelected.contacteId).FirstOrDefault();
-                    try
+                    OnNewModalDialog();
+                    if (respuesta == 1)
                     {
-                        te.telefon1 = Telefon1;
-                        te.tipus = TipusT;
+                        telefon te = context.telefons.Where(x => x.contacteId == TelefonSelected.contacteId).FirstOrDefault();
+                        try
+                        {
+                            te.telefon1 = Telefon1;
+                            te.tipus = TipusT;
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                        context.SaveChanges();
+                        PopulateEmailsTelefons(); 
                     }
-                    catch (Exception ex)
-                    {
-                    }
-                    context.SaveChanges();
-                    PopulateEmailsTelefons();
                     //BtsClick("rbTelefons");
                     break;
 
                 case "esborrarTelefons":
-                    try
+                    OnNewModalDialog();
+                    if (respuesta == 1)
                     {
-                        context.telefons.Remove(TelefonSelected);
+                        try
+                        {
+                            context.telefons.Remove(TelefonSelected);
+                        }
+                        catch (Exception ex) { }
+                        context.SaveChanges();
+                        PopulateEmailsTelefons(); 
                     }
-                    catch (Exception ex) { }
-                    context.SaveChanges();
-                    PopulateEmailsTelefons();
                     //BtsClick("rbTelefons");
                     break;
 
@@ -129,30 +151,38 @@ namespace Practica1MVVM.ViewModel
                     break;
 
                 case "modificarEmails":
-                    email em = context.emails.Where(x => x.contacteId == EmailSelected.contacteId).FirstOrDefault();
-                    try
+                    OnNewModalDialog();
+                    if (respuesta == 1)
                     {
-                        em.email1 = Email1;
-                        em.tipus = TipusE;
+                        email em = context.emails.Where(x => x.contacteId == EmailSelected.contacteId).FirstOrDefault();
+                        try
+                        {
+                            em.email1 = Email1;
+                            em.tipus = TipusE;
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                        context.SaveChanges();
+                        PopulateEmailsTelefons(); 
                     }
-                    catch (Exception ex)
-                    {
-                    }
-                    context.SaveChanges();
-                    PopulateEmailsTelefons();
                     //BtsClick("rbEmails");
                     break;
 
                 case "esborrarEmails":
-                    try
+                    OnNewModalDialog();
+                    if (respuesta == 1)
                     {
-                        context.emails.Remove(EmailSelected);
+                        try
+                        {
+                            context.emails.Remove(EmailSelected);
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                        context.SaveChanges();
+                        PopulateEmailsTelefons(); 
                     }
-                    catch (Exception ex)
-                    {
-                    }
-                    context.SaveChanges();
-                    PopulateEmailsTelefons();
                     //BtsClick("rbEmails");
                     break;
 
@@ -622,6 +652,39 @@ namespace Practica1MVVM.ViewModel
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        private int respuesta { get; set; }
+
+        private ObservableCollection<IDialogViewModel> _dialogs = new ObservableCollection<IDialogViewModel>();
+        public ObservableCollection<IDialogViewModel> Dialogs { get { return _dialogs; } }
+
+        public ICommand ModalCommand
+        {
+            get
+            {
+                return new RelayCommand(OnNewModalDialog);
+            }
+        }
+        public void OnNewModalDialog()
+        {
+            this.Dialogs.Add(new DialogWindowViewModel
+            { // inicialitzem les variables del diàleg a mostrar
+                OnOk = (sender) =>  //quan acaba el diàleg amb Ok
+                {
+                    respuesta = 1;
+                },
+
+                OnCancel = (sender) => //quan acaba el diàleg amb Cancel
+                {
+                    respuesta = 0;
+                },
+
+                OnCloseRequest = (sender) => //quan acaba el diàleg amb Close (tancant la finestra)
+                {
+                    respuesta = 0;
+                }
+            });
+        } 
     }
 }
 
