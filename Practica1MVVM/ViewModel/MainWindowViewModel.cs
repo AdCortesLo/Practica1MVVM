@@ -83,6 +83,44 @@ namespace Practica1MVVM.ViewModel
                     break;
 
                 case "DuplicarContactes":
+                    OnNewModalDialog();
+                    if (respuesta == 1)
+                    {
+                        contacte con = new contacte();
+                        con.nom = ContacteSelected.nom;
+                        con.cognoms = ContacteSelected.cognoms;
+                        context.contactes.Add(con);
+                        context.SaveChanges();
+
+                        List<telefon> telefons = ContacteSelected.telefons.ToList();
+                        List<email> emails = ContacteSelected.emails.ToList();
+
+                        foreach (telefon item in telefons)
+                        {
+                            telefon tel = new telefon();
+                            tel.contacteId = con.contacteId;
+                            tel.telefon1 = item.telefon1;
+                            tel.tipus = item.tipus;
+                            con.telefons.Add(tel);
+                        }
+                        
+                        foreach (email item in emails)
+                        {
+                            email ema = new email();
+                            ema.contacteId = con.contacteId;
+                            ema.email1 = item.email1;
+                            ema.tipus = item.tipus;
+                            con.emails.Add(ema);
+                        }
+                        
+                        try
+                        {
+                            context.SaveChanges();
+                        }
+                        catch (Exception){}
+                        PopulateEmailsTelefons();
+                        BtsClick("rbContactes");
+                    }
                     break;
 
                 case "afegirTelefons":

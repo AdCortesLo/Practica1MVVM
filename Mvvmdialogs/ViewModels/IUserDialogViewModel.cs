@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mvvmdialogs.ViewModels
+namespace MvvmDialogs.ViewModels
 {
     public interface IUserDialogViewModel : IDialogViewModel
     {

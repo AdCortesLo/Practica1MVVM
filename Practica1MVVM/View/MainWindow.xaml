@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Practica1MVVM"
-        xmlns:dlgs="clr-namespace:MvvmDialogs.Behaviors;assembly=MvvmDialogs"
-        dlgs:DialogBehavior.DialogViewModels="{Binding Dialogs}"   
+      	xmlns:dlgs="clr-namespace:MvvmDialogs.Behaviors;assembly=MvvmDialogs"
+		dlgs:DialogBehavior.DialogViewModels="{Binding Dialogs}"
         xmlns:ViewModel="clr-namespace:Practica1MVVM.ViewModel" x:Class="Practica1MVVM.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="598.489" MinWidth="801.924" Height="568.489" Width="777.924" Background="White">
@@ -66,7 +66,7 @@
             <RadioButton x:Name="rbComençaContacte" Content="Comença" HorizontalAlignment="Left" Margin="94,68,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="ContactesRB"/>
             <RadioButton x:Name="rbAcabaContacte" Content="Acaba" HorizontalAlignment="Left" Margin="183,68,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="ContactesRB"/>
             <RadioButton x:Name="rbSenseContacte" Content="Sense" HorizontalAlignment="Left" Margin="183,36,0,0" VerticalAlignment="Top" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" GroupName="ContactesRB" IsChecked="True"/>
-            <Button x:Name="DuplicarContactes" Content="Duplicar" HorizontalAlignment="Left" Margin="94,537,0,0" VerticalAlignment="Top" Width="75" />
+            <Button x:Name="DuplicarContactes" Content="Duplicar" HorizontalAlignment="Left" Margin="94,537,0,0" VerticalAlignment="Top" Width="75" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}"/>
         </Grid>
         <Grid Grid.Column = "1" IsEnabled="{Binding IsTelefonsEnabled}" Background="{Binding IsTelefonsEnabled}">
             <RadioButton x:Name="rbTelefons" Content="Telèfons" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" GroupName="RadioButtonGroup" Command="{Binding BtsCommand}" CommandParameter="{Binding Name, RelativeSource= {RelativeSource Self}}" Grid.Column="1" IsChecked="{Binding IsRbTelefonsChecked}"/>

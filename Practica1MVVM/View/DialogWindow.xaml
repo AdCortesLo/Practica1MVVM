@@ -3,13 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Practica1MVVM.View"
+        xmlns:local="clr-namespace:Practica1MVVM"
         xmlns:ViewModel="clr-namespace:Practica1MVVM.ViewModel" x:Class="Practica1MVVM.View.DialogWindow"
+    
         mc:Ignorable="d"
         Title="DialogWindow" Height="140.667" Width="219.333">
-    <Window.DataContext>
-        <ViewModel:DialogWindowViewModel/>
-    </Window.DataContext>
+    
     <Grid>
         <Button Content="Cancel" HorizontalAlignment="Left" Margin="35,53,0,0" VerticalAlignment="Top" Width="50" Command="{Binding CancelCommand}" />
         <Button Content="Ok" HorizontalAlignment="Left" Margin="137,53,0,0" VerticalAlignment="Top" Width="33" RenderTransformOrigin="0.941,0.526" Command="{Binding OkCommand}"/>

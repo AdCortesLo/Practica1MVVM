@@ -1,11 +1,11 @@
-﻿using Mvvmdialogs.ViewModels;
+﻿using MvvmDialogs.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mvvmdialogs.Presenters
+namespace MvvmDialogs.Presenters
 {
     public interface IDialogBoxPresenter<T> where T : IDialogViewModel
     {
