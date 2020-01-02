@@ -35,6 +35,11 @@ namespace Practica1MVVM.ViewModel
             RbNameActual = rbName;
             switch (rbName)
             {
+
+                case "HabilitarMulti":
+                    IsMultiEnabled = true;
+                    break;
+
                 /* Buttons CRUD */
 
                 case "afegirContactes":
@@ -662,6 +667,18 @@ namespace Practica1MVVM.ViewModel
             set
             {
                 _isRbEmailsChecked = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
+        private bool _isMultiEnabled;
+        public bool IsMultiEnabled
+        {
+            get { return _isMultiEnabled; }
+            set
+            {
+                _isMultiEnabled = value;
                 NotifyPropertyChanged();
             }
         }
